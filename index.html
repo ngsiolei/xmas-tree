@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<title>Merry Christmas</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-size: 16px;
+  padding-top: 1em;
+}
+#tree {
+  margin: 0 auto;
+  position: relative;
+}
+#tree div {
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  opacity: 0.6;
+  filter:alpha(opacity=60);
+  position: absolute;
+}
+</style>
+</head>
+<body>
+<div id="tree"></div>
+<script>
+var Tree = {};
+Tree.unit = 10;
+Tree.width = 0.9 * document.documentElement.clientWidth;
+Tree.height = 0.9 * document.documentElement.clientHeight;
+Tree.center = Tree.width / 2;
+Tree.container = document.getElementById('tree');
+Tree.colors = [
+  '#CCCC99', '#CCCC66', '#CCCC33', '#CCCC00', '#99FF33', '#99FF00',
+  '#66FF99', '#66FF66', '#66FF33', '#66FF00', '#33FF66', '#33FF33',
+  '#99FF66', '#00FF66', '#00FF33', '#00FF00', '#33FF00', '#33EE33',
+  '#99CC66', '#99CC33', '#99CC00', '#66CC66', '#66CC33', '#66CC00',
+  '#00CC33', '#00CC00', '#33CC33', '#33CC00', '#00CC66', '#33CC66',
+  '#FF0000',
+];
+Tree.init = function () {
+  Tree.container.style.width = Tree.width + 'px';
+  Tree.container.style.height = Tree.height + 'px';
+  for (var row = 0; row < Tree.height / Tree.unit; row++) {
+    for (var col = -row / 2; col < row / 2; col++) {
+      var style = Tree.getStyle(row, col);
+      if (style.left > Tree.width || style.left < 0) {
+        row = Tree.height / Tree.unit;
+        break;
+      }
+      var elem = document.createElement('div');
+      var attr = document.createAttribute('style');
+      attr.value = 'background-color: ' + style.backgroundColor + '; ' +
+                   'left: ' + style.left + 'px; ' +
+                   'height: ' + style.height + 'px; ' +
+                   'top: ' + style.top + 'px; ' +
+                   'width: ' + style.width + 'px;';
+      elem.setAttributeNode(attr);
+      Tree.container.appendChild(elem);
+    }
+  }
+};
+Tree.getStyle = function (row, col) {
+  var cx = Tree.center + Tree.unit * col;
+  var cy = Tree.unit * row;
+  var style = {};
+  style.width = Math.random() * Tree.unit + 1;
+  style.height = style.width;
+  style.left = cx - (style.width / 2) + (Math.random() * Tree.unit / 2 * (Math.random() == 0 ? 1 : -1));
+  style.top = cy - (style.height / 2) + (Math.random() * Tree.unit / 2 * (Math.random() == 0 ? 1 : -1));
+  style.backgroundColor = Tree.colors[Math.floor(Math.random() * Tree.colors.length)];
+  return style;
+};
+window.onload = Tree.init;
+</script>
+</body>
+</html>
